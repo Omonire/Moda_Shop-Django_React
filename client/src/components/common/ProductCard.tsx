@@ -13,6 +13,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isFavorite, setIsFavorite] = useState(false)
   const navigate = useNavigate()
   const handleAddToCart = async () => {
     setIsLoading(true)
@@ -54,13 +55,26 @@ export function ProductCard({ product }: ProductCardProps) {
           </Badge>
         )}
         <div className="absolute right-2 top-2 flex flex-col gap-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
-          <Tooltip content="Añadir a favoritos">
-            <Button variant="secondary" size="icon-sm" className="rounded-full" aria-label="Añadir a favoritos">
-              <Heart className="h-4 w-4" />
+          <Tooltip content={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}>
+            <Button
+              variant="secondary"
+              size="icon-sm"
+              className="rounded-full"
+              aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+              aria-pressed={isFavorite}
+              onClick={() => setIsFavorite((value) => !value)}
+            >
+              <Heart className="h-4 w-4" fill={isFavorite ? "currentColor" : "none"} />
             </Button>
           </Tooltip>
           <Tooltip content="Vista rápida">
-            <Button variant="secondary" size="icon-sm" className="rounded-full" aria-label="Vista rápida">
+            <Button
+              variant="secondary"
+              size="icon-sm"
+              className="rounded-full"
+              aria-label={`Vista rápida de ${product.name}`}
+              onClick={() => handleToProduct(product.slug)}
+            >
               <Search className="h-4 w-4" />
             </Button>
           </Tooltip>

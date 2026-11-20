@@ -1,7 +1,7 @@
 import type React from "react"
 
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { useState, useEffect, useRef } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { Search, Bell, Heart, ShoppingCart, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { UserAvatar } from "@/components/ui/UserAvatar"
@@ -11,33 +11,43 @@ import { Sidebar } from "./Sidebar"
 import { sidebarItems } from "@/constants/sidebar-item"
 import { useUser } from "@/context/user-context"
 import { paths } from "@/config/paths"
+import { getCart } from "@/services/cartService"
 
 export function GeneralLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
   const { user } = useUser()
-  
+  const navigate = useNavigate()
+  const scrollYRef = useRef(0)
+
+  useEffect(() => {
+    let active = true
+
+    getCart()
+      .then((data) => {
+        if (active) setCartCount(data?.cart?.items?.length ?? 0)
+      })
+      .catch(() => {})
+
+    return () => {
+      active = false
+    }
+  }, [])
+
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Save the current scroll position
-      const scrollY = window.scrollY
+      // Save the current scroll position before locking the body.
+      scrollYRef.current = window.scrollY
 
-      // Add styles to prevent scrolling and maintain position
       document.body.style.position = "fixed"
-      document.body.style.top = `-${scrollY}px`
+      document.body.style.top = `-${scrollYRef.current}px`
       document.body.style.width = "100%"
     } else {
-      // Get the scroll position from the body's top property
-      const scrollY = document.body.style.top
-
-      // Remove the styles that prevent scrolling
       document.body.style.position = ""
       document.body.style.top = ""
       document.body.style.width = ""
 
-      // Restore the scroll position
-      if (scrollY) {
-        window.scrollTo(0, Number.parseInt(scrollY || "0", 10) * -1)
-      }
+      window.scrollTo(0, scrollYRef.current)
     }
 
     // Cleanup function to ensure scrolling is re-enabled if component unmounts
@@ -145,14 +155,22 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
               </Tooltip>
               <Tooltip content="Carrito">
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                  <Button variant="ghost" size="icon" className="relative">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative"
+                    aria-label={`Carrito, ${cartCount} ${cartCount === 1 ? "producto" : "productos"}`}
+                    onClick={() => navigate(paths.app.cart.path)}
+                  >
                     <ShoppingCart className="h-5 w-5" />
-                    <Badge
-                      variant="primary"
-                      className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0"
-                    >
-                      3
-                    </Badge>
+                    {cartCount > 0 && (
+                      <Badge
+                        variant="primary"
+                        className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0"
+                      >
+                        {cartCount}
+                      </Badge>
+                    )}
                   </Button>
                 </motion.div>
               </Tooltip>

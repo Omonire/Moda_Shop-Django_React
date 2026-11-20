@@ -3,8 +3,12 @@ import { Card } from "@/components/ui/Card"
 import HeroImage from "@/assets/pages/hero.jpg"
 import HeroImage2 from "@/assets/pages/hero2.jpg"
 import HeroImage3 from "@/assets/pages/hero3.jpg"
+import { paths } from "@/config/paths"
+import { useNavigate } from "react-router-dom"
 
 export function HeroSection() {
+  const navigate = useNavigate()
+
   return (
     <Card className="col-span-full overflow-hidden">
       <div className="relative h-[300px] w-full md:h-[400px]">
@@ -21,8 +25,10 @@ export function HeroSection() {
             Descubre las últimas tendencias y renueva tu armario con nuestras prendas exclusivas.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg">Comprar ahora</Button>
-            <Button variant="outline" size="lg">
+            <Button size="lg" onClick={() => navigate(paths.app.products.path)}>
+              Comprar ahora
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => navigate(paths.app.categories.path)}>
               Ver catálogo
             </Button>
           </div>
