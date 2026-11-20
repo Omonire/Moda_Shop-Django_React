@@ -65,8 +65,12 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <motion.button
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(224,34%,25%)] text-[hsl(215,100%,92%)] md:hidden"
+                type="button"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-raised text-foreground md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-navigation"
                 whileTap={{ scale: 0.9 }}
                 whileHover={{
                   backgroundColor: "hsl(224,34%,28%)",
@@ -182,7 +186,8 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
         <AnimatePresence mode="wait">
           {mobileMenuOpen && (
             <motion.div
-              className="fixed inset-x-0 top-16 z-40 overflow-hidden bg-[hsl(224,34%,22%)] shadow-lg md:hidden"
+              id="mobile-navigation"
+              className="fixed inset-x-0 top-16 z-40 overflow-hidden bg-surface shadow-lg md:hidden"
               initial={{ opacity: 0, height: 0 }}
               animate={{
                 opacity: 1,
