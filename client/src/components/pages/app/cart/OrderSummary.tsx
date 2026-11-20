@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card";
+import { formatPrice } from "@/utils/formatPrice";
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -24,58 +25,58 @@ export function OrderSummary({
     <Card>
       {isUpdating ? (
         <>
-          <CardHeader className="border-b border-[hsl(224,34%,30%)]">
+          <CardHeader className="border-b border-border">
             <CardTitle>Actualizando pedido...</CardTitle>
           </CardHeader>
           <CardContent className="p-4">
             <div className="flex justify-center items-center">
-              <Spinner className="h-5 w-5 text-[hsl(215,100%,92%)]" />
+              <Spinner className="h-5 w-5 text-ring" />
             </div>
           </CardContent>
         </>
       ) : (
         <>
-          <CardHeader className="border-b border-[hsl(224,34%,30%)]">
+          <CardHeader className="border-b border-border">
             <CardTitle>Resumen del pedido</CardTitle>
           </CardHeader>
           <CardContent className="p-4">
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-[hsl(215,100%,92%)/70]">Subtotal</span>
-                <span className="font-medium text-[hsl(215,100%,92%)]">
-                  €{subtotal.toFixed(2)}
+                <span className="text-muted-foreground">Subtotal</span>
+                <span className="font-medium text-foreground">
+                  {formatPrice(subtotal)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[hsl(215,100%,92%)/70]">Envío</span>
-                <span className="font-medium text-[hsl(215,100%,92%)]">
+                <span className="text-muted-foreground">Envío</span>
+                <span className="font-medium text-foreground">
                   {"Gratis"}
                 </span>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-[hsl(215,100%,92%)/70]">Descuento</span>
-                  <span className="font-medium text-green-500">
-                    -€{discount.toFixed(2)}
+                  <span className="text-muted-foreground">Descuento</span>
+                  <span className="font-medium text-success-light">
+                    -{formatPrice(discount)}
                   </span>
                 </div>
               )}
-              <div className="border-t border-[hsl(224,34%,30%)] pt-3">
+              <div className="border-t border-border pt-3">
                 <div className="flex justify-between">
-                  <span className="text-lg font-medium text-[hsl(215,100%,92%)]">
+                  <span className="text-lg font-medium text-foreground">
                     Total
                   </span>
-                  <span className="text-lg font-bold text-[hsl(215,100%,92%)]">
-                    €{total.toFixed(2)}
+                  <span className="text-lg font-bold text-foreground">
+                    {formatPrice(total)}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-[hsl(215,100%,92%)/70]">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Impuestos incluidos. El envío se calcula en el checkout.
                 </p>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="border-t border-[hsl(224,34%,30%)] p-4">
+          <CardFooter className="border-t border-border p-4">
             <Button className="w-full" size="lg">
               Proceder al pago
             </Button>

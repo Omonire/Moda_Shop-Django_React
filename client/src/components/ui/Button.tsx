@@ -49,23 +49,20 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
   isLoading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, rounded, isLoading = false, children, asChild = false, disabled, ...props }, ref) => {
-    const Comp = asChild ? React.Fragment : "button"
-
+  ({ className, variant, size, rounded, isLoading = false, children, disabled, ...props }, ref) => {
     return (
-      <Comp
+      <button
         className={cn(buttonVariants({ variant, size, rounded, className }))}
         ref={ref}
         disabled={isLoading || disabled}
         {...props}
       >
         {isLoading ? <Spinner className="h-5 w-5 text-current" /> : children}
-      </Comp>
+      </button>
     )
   }
 )
