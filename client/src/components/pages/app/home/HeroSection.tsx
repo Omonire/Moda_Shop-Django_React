@@ -17,18 +17,21 @@ export function HeroSection() {
           interval={5000}
           className="rounded-card shadow-card"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary to-transparent p-8 flex flex-col justify-center">
-          <h1 className="mb-2 max-w-md text-display font-bold text-foreground md:text-5xl">
+        <div className="absolute inset-0 flex flex-col justify-center bg-gradient-to-r from-primary via-primary/80 to-transparent p-8">
+          <span className="mb-4 inline-flex w-fit items-center rounded-full border border-accent/40 bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-success-light">
+            Nueva temporada
+          </span>
+          <h1 className="text-glow mb-2 max-w-lg text-display font-bold text-foreground md:text-6xl">
             Nueva Colección Primavera 2025
           </h1>
           <p className="mb-6 max-w-md text-foreground/80">
             Descubre las últimas tendencias y renueva tu armario con nuestras prendas exclusivas.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" onClick={() => navigate(paths.app.products.path)}>
+            <Button size="lg" rounded="full" onClick={() => navigate(paths.app.products.path)}>
               Comprar ahora
             </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate(paths.app.categories.path)}>
+            <Button variant="outline" size="lg" rounded="full" onClick={() => navigate(paths.app.categories.path)}>
               Ver catálogo
             </Button>
           </div>

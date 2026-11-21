@@ -21,7 +21,7 @@ export function BrandLogo({ className, showText = true }: BrandLogoProps) {
       )}
     >
       <motion.div
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-background"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-dark shadow-card"
         whileHover={reduceMotion ? undefined : { scale: 1.05 }}
         whileTap={reduceMotion ? undefined : { scale: 0.95 }}
       >

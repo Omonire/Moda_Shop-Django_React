@@ -46,7 +46,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
       exit={{ opacity: 0, transition: { duration: reduceMotion ? 0 : 0.35 } }}
     >
       <motion.div
-        className="flex h-24 w-24 items-center justify-center rounded-full bg-foreground p-3 shadow-elevated"
+        className="flex h-24 w-24 items-center justify-center rounded-full bg-accent p-3 shadow-elevated"
         initial={reduceMotion ? false : { scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: reduceMotion ? 0 : 0.45, ease: "easeOut" }}

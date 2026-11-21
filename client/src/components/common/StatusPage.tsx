@@ -14,13 +14,13 @@ interface StatusPageProps {
 }
 
 const codeToneClasses: Record<StatusTone, string> = {
-  default: "text-info-light",
+  default: "text-success-light",
   error: "text-danger-light",
   success: "text-success-light",
 };
 
 const accentToneClasses: Record<StatusTone, string> = {
-  default: "bg-info",
+  default: "bg-accent",
   error: "bg-danger",
   success: "bg-success",
 };

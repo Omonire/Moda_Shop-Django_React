@@ -16,7 +16,7 @@ const toastTheme = {
   "--toastify-color-success": "var(--color-success-light)",
   "--toastify-color-warning": "var(--color-warning-light)",
   "--toastify-color-error": "var(--color-danger-light)",
-  "--toastify-color-progress-dark": "var(--color-info-light)",
+  "--toastify-color-progress-dark": "var(--color-accent)",
   "--toastify-toast-background": "var(--color-surface-raised)",
   "--toastify-font-family": "var(--font-sans)",
   "--toastify-toast-bd-radius": "var(--radius-control)",
@@ -34,7 +34,7 @@ export const App = () => {
           style={toastTheme}
           className="text-sm text-foreground"
           toastClassName="border border-card-border rounded-control shadow-card"
-          progressClassName="bg-info-light"
+          progressClassName="bg-accent"
         />
         <AppRouter />
       </UserProvider>

@@ -11,7 +11,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-card border border-card-border bg-card text-card-foreground shadow-card overflow-hidden",
+      "rounded-card border border-card-border bg-card text-card-foreground shadow-card overflow-hidden transition-[transform,background-color,border-color] duration-200 hover:border-ring/30 hover:bg-surface-raised/70",
       {
         "bg-card": variant === "default",
         "bg-background": variant === "primary",

@@ -14,9 +14,13 @@ import { Sidebar } from "./Sidebar"
 import { useUser } from "@/context/user-context"
 import { paths } from "@/config/paths"
 import { getCart } from "@/services/cartService"
+import { cn } from "@/utils/cn"
 
 export function GeneralLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(
+    () => typeof window !== "undefined" && window.localStorage.getItem("modashop-sidebar-collapsed") === "true"
+  )
   const [cartCount, setCartCount] = useState(0)
   const { user } = useUser()
   const navigate = useNavigate()
@@ -38,6 +42,10 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
       active = false
     }
   }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem("modashop-sidebar-collapsed", String(sidebarCollapsed))
+  }, [sidebarCollapsed])
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -89,9 +97,17 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar />
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed((value) => !value)}
+      />
 
-      <div className="flex-1 md:ml-64">
+      <div
+        className={cn(
+          "flex-1 transition-[margin] duration-300",
+          sidebarCollapsed ? "md:ml-20" : "md:ml-64"
+        )}
+      >
         <header className="sticky top-0 z-40 border-b border-border bg-background">
           <Container className="flex h-16 items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-4">
@@ -121,7 +137,7 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
                 <Input
                   variant="search"
                   placeholder="Buscar productos..."
-                  className="w-64"
+                   className="w-64 rounded-full border-transparent bg-surface-raised"
                   icon={<Search className="h-4 w-4" />}
                 />
               </div>
@@ -136,6 +152,7 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
                   <Button
                     variant="ghost"
                     size="icon"
+                    rounded="full"
                     aria-label="Notificaciones, ir a ayuda"
                     onClick={() => navigate(paths.app.help.path)}
                     className="relative"
@@ -158,6 +175,7 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
                   <Button
                     variant="ghost"
                     size="icon"
+                    rounded="full"
                     aria-label="Favoritos, ver productos"
                     onClick={() => navigate(paths.app.products.path)}
                   >
@@ -173,6 +191,7 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
                   <Button
                     variant="ghost"
                     size="icon"
+                    rounded="full"
                     className="relative"
                     aria-label={`Carrito, ${cartCount} ${cartCount === 1 ? "producto" : "productos"}`}
                     onClick={() => navigate(paths.app.cart.path)}
@@ -261,7 +280,41 @@ export function GeneralLayout({ children }: { children: React.ReactNode }) {
           )}
         </AnimatePresence>
 
-        <main>{children}</main>
+        <div
+          className={cn(
+            "fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-surface/95 backdrop-blur transition-[left] duration-300",
+            sidebarCollapsed ? "md:left-20" : "md:left-64"
+          )}
+        >
+          <Container className="flex h-16 items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-dark shadow-card">
+                <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-foreground">Tu carrito</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {cartCount} {cartCount === 1 ? "producto" : "productos"}
+                </p>
+              </div>
+            </div>
+
+            <div className="hidden h-1 w-40 overflow-hidden rounded-full bg-surface-raised sm:block">
+              <div className="h-full w-1/3 rounded-full bg-accent" />
+            </div>
+
+            <Button
+              size="sm"
+              rounded="full"
+              onClick={() => navigate(paths.app.cart.path)}
+              aria-label="Ver carrito"
+            >
+              Ver carrito
+            </Button>
+          </Container>
+        </div>
+
+        <main className="pb-24">{children}</main>
       </div>
     </div>
   )

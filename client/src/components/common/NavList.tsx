@@ -1,17 +1,22 @@
 import { Link, useLocation } from "react-router-dom"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { cn } from "@/utils/cn"
 import { paths } from "@/config/paths"
 import { sidebarItems } from "@/constants/sidebar-item"
+import { Tooltip } from "@/components/ui/ToolTip"
 
 interface NavListProps {
   variant?: "sidebar" | "mobile"
   onNavigate?: () => void
   className?: string
+  collapsed?: boolean
 }
 
-export function NavList({ variant = "sidebar", onNavigate, className }: NavListProps) {
+export function NavList({ variant = "sidebar", onNavigate, className, collapsed = false }: NavListProps) {
   const { pathname } = useLocation()
+  const reduceMotion = useReducedMotion()
   const isMobile = variant === "mobile"
+  const iconOnly = collapsed && !isMobile
 
   const isActive = (href: string) =>
     pathname === href ||
@@ -25,34 +30,57 @@ export function NavList({ variant = "sidebar", onNavigate, className }: NavListP
 
           return (
             <li key={item.id}>
-              <Link
-                to={item.href}
-                onClick={onNavigate}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "group flex items-center gap-3 rounded-control px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                  active && "bg-surface-raised shadow-card",
-                  isMobile && "justify-between py-3"
-                )}
-              >
-                <span className="flex items-center gap-3">
+              <Tooltip content={item.title} position="right" disabled={!iconOnly}>
+                <Link
+                  to={item.href}
+                  onClick={onNavigate}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "group relative flex items-center overflow-hidden rounded-control text-sm font-medium text-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    iconOnly ? "justify-center p-2" : "gap-3 px-3 py-2",
+                    active && "text-foreground"
+                  )}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId={`nav-active-${variant}`}
+                      className="absolute inset-0 rounded-control bg-gradient-to-r from-ring/25 via-ring/10 to-transparent shadow-card ring-1 ring-inset ring-ring/20"
+                      transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 30 }}
+                    />
+                  )}
+
                   <span
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-control bg-subtle text-foreground transition-colors group-hover:bg-ring group-hover:text-background",
+                      "relative flex h-8 w-8 shrink-0 items-center justify-center rounded-control bg-subtle text-foreground transition-colors group-hover:bg-ring group-hover:text-background",
                       active && "bg-ring text-background"
                     )}
                   >
                     <item.icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <span>{item.title}</span>
-                </span>
-                {isMobile && (
-                  <span
-                    className={cn("h-2 w-2 rounded-full bg-subtle", active && "bg-ring")}
-                    aria-hidden="true"
-                  />
-                )}
-              </Link>
+
+                  <AnimatePresence initial={false}>
+                    {!iconOnly && (
+                      <motion.span
+                        key="label"
+                        className="relative overflow-hidden whitespace-nowrap"
+                        initial={reduceMotion ? false : { opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, width: 0 }}
+                        transition={{ duration: reduceMotion ? 0 : 0.18 }}
+                      >
+                        {item.title}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+
+                  {isMobile && (
+                    <span
+                      className={cn("relative ml-auto h-2 w-2 rounded-full bg-subtle", active && "bg-ring")}
+                      aria-hidden="true"
+                    />
+                  )}
+                </Link>
+              </Tooltip>
             </li>
           )
         })}
