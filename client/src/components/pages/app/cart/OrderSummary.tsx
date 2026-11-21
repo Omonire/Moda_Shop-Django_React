@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 import { formatPrice } from "@/utils/formatPrice";
+import { showInfoToast } from "@/utils/toast";
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -77,7 +78,11 @@ export function OrderSummary({
             </div>
           </CardContent>
           <CardFooter className="border-t border-border p-4">
-            <Button className="w-full" size="lg">
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={() => showInfoToast("El pago estará disponible pronto")}
+            >
               Proceder al pago
             </Button>
           </CardFooter>

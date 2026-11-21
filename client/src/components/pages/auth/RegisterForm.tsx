@@ -6,6 +6,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { showInfoToast } from "@/utils/toast";
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -299,7 +300,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         {errors.root?.message && (
           <p role="alert" className="text-sm text-danger-light">{errors.root.message}</p>
         )}
-        <Button type="submit" className="w-full" isLoading={isLoading}>
+        <Button type="submit" className="w-full" isLoading={isLoading} loadingText="Creando cuenta...">
           {t('register.signUp')}
         </Button>
       </div>
@@ -316,7 +317,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => showInfoToast("El acceso social estará disponible pronto")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -343,7 +344,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           </svg>
           Google
         </Button>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => showInfoToast("El acceso social estará disponible pronto")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

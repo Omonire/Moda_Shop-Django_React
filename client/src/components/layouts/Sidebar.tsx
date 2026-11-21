@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import { motion, useReducedMotion } from "framer-motion"
 import { UserAvatar } from "../ui/UserAvatar"
 import { Container } from "@/components/ui/Container"
 import { BrandLogo } from "@/components/common/BrandLogo"
@@ -9,7 +8,6 @@ import { paths } from "@/config/paths"
 
 export function Sidebar() {
   const { user } = useUser()
-  const reduceMotion = useReducedMotion()
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 border-r border-border bg-surface md:block">
@@ -18,12 +16,7 @@ export function Sidebar() {
       </Container>
 
       <Container className="py-6">
-        <motion.div
-          className="mb-6"
-          initial={reduceMotion ? false : { opacity: 0, y: -8 }}
-          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.25 }}
-        >
+        <div className="mb-6">
           <Link
             to={paths.app.profile.path}
             className="flex items-center gap-3 rounded-card bg-subtle px-3 py-3 transition-colors hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -36,7 +29,7 @@ export function Sidebar() {
               <p className="truncate text-xs text-muted-foreground">{user?.username}</p>
             </div>
           </Link>
-        </motion.div>
+        </div>
 
         <NavList variant="sidebar" />
       </Container>

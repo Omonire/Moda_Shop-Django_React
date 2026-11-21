@@ -9,6 +9,7 @@ import { addToCart } from "@/services/cartService"
 import { Product } from "@/types/Product"
 import { cn } from "@/utils/cn"
 import { formatPrice } from "@/utils/formatPrice"
+import { showInfoToast, showSuccessToast } from "@/utils/toast"
 import { Rating } from "./Rating"
 
 type ProductCardVariant = "grid" | "list" | "compact"
@@ -53,6 +54,17 @@ export function ProductCard({
 
   const handleToProduct = () => {
     navigate(paths.app.products.details.getHref(product.slug))
+  }
+
+  const handleToggleFavorite = () => {
+    const next = !isFavorite
+    setIsFavorite(next)
+
+    if (next) {
+      showSuccessToast(`${product.name} añadido a favoritos`)
+    } else {
+      showInfoToast(`${product.name} quitado de favoritos`)
+    }
   }
 
   const favoriteLabel = isFavorite
@@ -115,7 +127,7 @@ export function ProductCard({
             className="rounded-control"
             aria-label={favoriteLabel}
             aria-pressed={isFavorite}
-            onClick={() => setIsFavorite((value) => !value)}
+            onClick={handleToggleFavorite}
           >
             <Heart
               className="h-4 w-4"

@@ -45,7 +45,7 @@ export function BrandLogo({ className, showText = true }: BrandLogoProps) {
       {showText && (
         <motion.span
           className="text-heading font-bold text-foreground"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: reduceMotion ? 0 : 0.2 }}
         >

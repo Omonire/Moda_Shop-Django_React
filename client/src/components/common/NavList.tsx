@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom"
-import { motion, useReducedMotion } from "framer-motion"
 import { cn } from "@/utils/cn"
 import { paths } from "@/config/paths"
 import { sidebarItems } from "@/constants/sidebar-item"
@@ -12,7 +11,6 @@ interface NavListProps {
 
 export function NavList({ variant = "sidebar", onNavigate, className }: NavListProps) {
   const { pathname } = useLocation()
-  const reduceMotion = useReducedMotion()
   const isMobile = variant === "mobile"
 
   const isActive = (href: string) =>
@@ -22,16 +20,11 @@ export function NavList({ variant = "sidebar", onNavigate, className }: NavListP
   return (
     <nav aria-label={isMobile ? "Navegación móvil" : "Navegación principal"} className={className}>
       <ul className={cn("space-y-1", isMobile && "space-y-2")}>
-        {sidebarItems.map((item, index) => {
+        {sidebarItems.map((item) => {
           const active = isActive(item.href)
 
           return (
-            <motion.li
-              key={item.id}
-              initial={reduceMotion ? false : { opacity: 0, x: -12 }}
-              animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-              transition={{ duration: reduceMotion ? 0 : 0.2, delay: reduceMotion ? 0 : index * 0.03 }}
-            >
+            <li key={item.id}>
               <Link
                 to={item.href}
                 onClick={onNavigate}
@@ -60,7 +53,7 @@ export function NavList({ variant = "sidebar", onNavigate, className }: NavListP
                   />
                 )}
               </Link>
-            </motion.li>
+            </li>
           )
         })}
       </ul>

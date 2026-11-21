@@ -8,7 +8,7 @@ import { SpecialOffer } from "@/components/pages/app/home/SpecialOffer";
 import { TrendingProducts } from "@/components/pages/app/home/TrendingProducts";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Category } from "@/types/Categories";
 import type { Product } from "@/types/Product";
 import { api } from "@/axios/BaseAxios";
@@ -40,7 +40,6 @@ function SectionMessage({ className, title, description }: { className?: string;
 }
 
 export function HomePage() {
-  const reduceMotion = useReducedMotion();
   const [status, setStatus] = useState<FetchStatus>("loading");
   const [categories, setCategories] = useState<Category[]>([]);
   const [productFeatured, setProductFeatured] = useState<Product>();
@@ -71,9 +70,8 @@ export function HomePage() {
   return (
     <motion.main
       className="pb-4"
-      initial={reduceMotion ? false : { opacity: 0 }}
+      initial={false}
       animate={{ opacity: 1 }}
-      transition={{ duration: reduceMotion ? 0 : 0.2 }}
     >
       <PageHeader
         breadcrumbs={[

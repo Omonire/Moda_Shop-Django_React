@@ -50,18 +50,27 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean
+  loadingText?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, rounded, isLoading = false, children, disabled, ...props }, ref) => {
+  ({ className, variant, size, rounded, isLoading = false, loadingText, children, disabled, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, rounded, className }))}
         ref={ref}
         disabled={isLoading || disabled}
+        aria-busy={isLoading || undefined}
         {...props}
       >
-        {isLoading ? <Spinner className="h-5 w-5 text-current" /> : children}
+        {isLoading ? (
+          <>
+            <Spinner className={cn("h-5 w-5 text-current", loadingText && "mr-2")} />
+            {loadingText}
+          </>
+        ) : (
+          children
+        )}
       </button>
     )
   }

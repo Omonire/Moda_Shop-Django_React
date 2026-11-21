@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { api } from "@/axios/BaseAxios";
 import { useUser } from "@/context/user-context";
 import { useAuth } from "@/context/auth-context";
+import { showErrorToast, showSuccessToast } from "@/utils/toast";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -37,10 +38,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           login(user);
           refreshAuth();  
         }
+        showSuccessToast("Sesión iniciada correctamente");
         onSuccess();
       })
       .catch((error) => {
         console.error(error);
+        showErrorToast(error.response?.data?.detail ?? "No se pudo iniciar sesión");
       })
       .finally(() => {
         setIsLoading(false);
@@ -121,7 +124,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             Recordar mi sesión
           </Label>
         </div>
-        <Button type="submit" className="w-full" isLoading={isLoading}>
+        <Button type="submit" className="w-full" isLoading={isLoading} loadingText="Iniciando sesión...">
           Iniciar sesión
         </Button>
       </form>

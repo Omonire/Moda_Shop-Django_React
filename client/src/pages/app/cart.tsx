@@ -16,6 +16,7 @@ import { getCart, updateCartItem, removeFromCart, clearCart } from "@/services/c
 import { AnimatedPage } from "@/components/layouts/AnimatedPage";
 import { PageHeader } from "@/components/PageHeader";
 import { paths } from "@/config/paths";
+import { showErrorToast, showInfoToast, showSuccessToast } from "@/utils/toast";
 
 export function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -74,8 +75,10 @@ export function CartPage() {
         )
       );
       setSubtotal(response.cart.sum_total);
+      showSuccessToast("Cantidad actualizada");
     } catch (error) {
       console.error("Error al actualizar el carrito:", error);
+      showErrorToast("No se pudo actualizar el carrito");
     } finally {
       setUpdatingItems(prev => prev.filter(itemId => itemId !== id));
     }
@@ -88,8 +91,10 @@ export function CartPage() {
       setSubtotal(response.cart.sum_total);
       setItems(prevItems => prevItems.filter(item => item.id !== id));
       setOriginalItems(prevItems => prevItems.filter(item => item.id !== id));
+      showInfoToast("Producto eliminado del carrito");
     } catch (error) {
       console.error("Error al eliminar el producto del carrito:", error);
+      showErrorToast("No se pudo eliminar el producto");
     } finally {
       setUpdatingItems(prev => prev.filter(itemId => itemId !== id));
     }
@@ -102,8 +107,10 @@ export function CartPage() {
       setItems([]);
       setOriginalItems([]);
       setSubtotal(0);
+      showSuccessToast("Carrito vaciado");
     } catch (error) {
       console.error("Error al vaciar el carrito:", error);
+      showErrorToast("No se pudo vaciar el carrito");
     } finally {
       setIsClearing(false);
     }
